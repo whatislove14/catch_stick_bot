@@ -4,15 +4,23 @@ import folium
 import storage
 import datetime
 import logging
+import os
 import pandas
+from flask import Flask, request
+from flask_sslify import SSLify
 
 TOKEN = "5219218963:AAFRuxk0G7RrYGAq6su7M5beww1RHl6KokY"
+APP_NAME = "catchstickbot"
+
+server = Flask(__name__)
+sslify = SSLify(server)
 
 logging.basicConfig(filename="logs.log", level=logging.INFO)
 
 bot = telebot.TeleBot(TOKEN)
 
 already_clicked = False
+
 
 def update_map():
     mapp = folium.Map(location=[54.859989, 82.972914], zoom_start=1)
@@ -21,9 +29,11 @@ def update_map():
             str(sig['num']), str(sig["status"])), icon=folium.Icon(color='gray')).add_to(mapp)
     mapp.save("map.html")
 
+
 @bot.message_handler(commands=["quit"])
 def quit(message):
     start(message)
+
 
 @bot.message_handler(commands=["getlogs"])
 def getlogs(message):
@@ -31,6 +41,7 @@ def getlogs(message):
         f = open("logs.log")
         bot.send_document(message.from_user.id, f)
         f.close()
+
 
 @bot.message_handler(commands=["my_sigs"])
 def gms(message):
@@ -41,16 +52,19 @@ def gms(message):
             sig['num'], sig['fio'], sig['time'], sig['longitude'], sig["latitude"], sig["status"]))
     update_map()
     f = open("map.html")
-    bot.send_message(message.from_user.id, "Карта заявок:", reply_markup=telebot.types.ReplyKeyboardRemove())
+    bot.send_message(message.from_user.id, "Карта заявок:",
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
     bot.send_document(message.from_user.id, f)
     f.close()
+
 
 @bot.message_handler(commands=["start"])
 def start(message):
     hello_message = '''
     Привет! Я помогу тебе зарегестрировать твою находку!\nПомни: на каждую находку отдельный сигнал ;)
     '''
-    bot.send_message(message.from_user.id, hello_message, reply_markup=telebot.types.ReplyKeyboardRemove())
+    bot.send_message(message.from_user.id, hello_message,
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
     ask_message = '''
     Выбери действие
     '''
@@ -75,7 +89,8 @@ def find_reg(callback_query):
         return
     already_clicked = True
     bot.answer_callback_query(callback_query.id)
-    message = bot.send_message(callback_query.from_user.id, 'Введите свое ФИО', reply_markup=telebot.types.ReplyKeyboardRemove())
+    message = bot.send_message(callback_query.from_user.id, 'Введите свое ФИО',
+                               reply_markup=telebot.types.ReplyKeyboardRemove())
     bot.register_next_step_handler(message, ask_geo)
 
 
@@ -98,9 +113,9 @@ def fin_reg(message, fio):
     global already_clicked
     new_num = len(storage.get_all_sigs())+1
     now_time = datetime.datetime.now()
-    storage.new_sig(message.from_user.id, new_num , fio,
+    storage.new_sig(message.from_user.id, new_num, fio,
                     now_time, str(message.location.longitude), str(message.location.latitude))
- 
+
     logging.info("New sig by {} ({}): ".format(str(message.from_user.id), message.from_user.username)+"Номер: {}\nФИО: {}\nДата {}\nМестоположение:\nlongitude {},\nlatitude {}\nСтатус: {}".format(
         str(new_num), fio, now_time, str(message.location.longitude), str(message.location.latitude), "registered")+"\n----------------")
 
@@ -128,14 +143,18 @@ def get_my_sigs(callback_query):
             sig['num'], sig['fio'], sig['time'], sig['longitude'], sig["latitude"], sig["status"]))
     update_map()
     f = open("map.html")
-    bot.send_message(callback_query.from_user.id, "Карта заявок:", reply_markup=telebot.types.ReplyKeyboardRemove())
+    bot.send_message(callback_query.from_user.id, "Карта заявок:",
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
     bot.send_document(callback_query.from_user.id, f)
     f.close()
 
+
 @bot.message_handler(commands=["org"])
 def ask_password_org(message):
-    bot.reply_to(message, "Введите пароль или /quit для выхода", reply_markup=telebot.types.ReplyKeyboardRemove())
+    bot.reply_to(message, "Введите пароль или /quit для выхода",
+                 reply_markup=telebot.types.ReplyKeyboardRemove())
     bot.register_next_step_handler(message, org_panel)
+
 
 def org_panel(message, not_entering=False):
     if message.text == "/quit":
@@ -145,8 +164,9 @@ def org_panel(message, not_entering=False):
         ask_password_org(message)
     else:
         if not not_entering:
-            logging.info("Entered orgpanel by {} ({})".format(str(message.from_user.id), message.from_user.username)+"\n----------------")
-        
+            logging.info("Entered orgpanel by {} ({})".format(
+                str(message.from_user.id), message.from_user.username)+"\n----------------")
+
         ask_message = '''
         Выберите действие. Для выхода введите /quit
         '''
@@ -158,18 +178,20 @@ def org_panel(message, not_entering=False):
         ]
         reply_markup = telebot.types.InlineKeyboardMarkup(keyboard)
         bot.send_message(message.from_user.id, ask_message,
-                        reply_markup=reply_markup)
+                         reply_markup=reply_markup)
 
 
 @bot.callback_query_handler(func=lambda c: c.data == 'change_status')
 def change_stat(callback_query):
     bot.answer_callback_query(callback_query.id)
-    message = bot.send_message(callback_query.from_user.id, "Введите номер находки", reply_markup=telebot.types.ReplyKeyboardRemove())
+    message = bot.send_message(callback_query.from_user.id, "Введите номер находки",
+                               reply_markup=telebot.types.ReplyKeyboardRemove())
 
     def choose_stat(message):
         sig = storage.get_sig(message.text)
         if sig is None:
-            bot.reply_to(message, "Такой заявки нет", reply_markup=telebot.types.ReplyKeyboardRemove())
+            bot.reply_to(message, "Такой заявки нет",
+                         reply_markup=telebot.types.ReplyKeyboardRemove())
             org_panel(message, True)
         else:
             keyboard = telebot.types.ReplyKeyboardMarkup()
@@ -184,20 +206,23 @@ def change_stat(callback_query):
             def fin_change_stat(message, num, sig):
                 storage.change_status(num, message.text)
                 logging.info("Change status by {} ({}): ".format(str(message.from_user.id), message.from_user.username)+"Номер: {}\nФИО: {}\nДата {}\nМестоположение:\nlongitude {},\nlatitude {}\nСтатус: {}".format(
-            sig['num'], sig['fio'], sig['time'], sig['longitude'], sig['latitude'], sig['status'])+" -> {}\n----------------".format(message.text))
-                bot.reply_to(message, 'Статус изменен', reply_markup=telebot.types.ReplyKeyboardRemove())
+                    sig['num'], sig['fio'], sig['time'], sig['longitude'], sig['latitude'], sig['status'])+" -> {}\n----------------".format(message.text))
+                bot.reply_to(message, 'Статус изменен',
+                             reply_markup=telebot.types.ReplyKeyboardRemove())
                 org_panel(message, True)
 
-            bot.register_next_step_handler(message, fin_change_stat, message.text, sig)
-
+            bot.register_next_step_handler(
+                message, fin_change_stat, message.text, sig)
 
     bot.register_next_step_handler(message, choose_stat)
-    
+
 
 @bot.message_handler(commands=["admin"])
 def ask_password_admin(message):
-    bot.reply_to(message, "Введите пароль или /quit для выхода", reply_markup=telebot.types.ReplyKeyboardRemove())
+    bot.reply_to(message, "Введите пароль или /quit для выхода",
+                 reply_markup=telebot.types.ReplyKeyboardRemove())
     bot.register_next_step_handler(message, admin_panel)
+
 
 def admin_panel(message, not_entering=False):
     if message.text == "/quit":
@@ -207,7 +232,8 @@ def admin_panel(message, not_entering=False):
         ask_password_admin(message)
     else:
         if not not_entering:
-            logging.info("Entered adminpanel by {} ({})".format(str(message.from_user.id), message.from_user.username)+"\n----------------")
+            logging.info("Entered adminpanel by {} ({})".format(
+                str(message.from_user.id), message.from_user.username)+"\n----------------")
         ask_message = '''
         Выберите действие. Для выхода введите /quit
         '''
@@ -221,18 +247,20 @@ def admin_panel(message, not_entering=False):
         ]
         reply_markup = telebot.types.InlineKeyboardMarkup(keyboard)
         bot.send_message(message.from_user.id, ask_message,
-                        reply_markup=reply_markup)
+                         reply_markup=reply_markup)
 
 
 @bot.callback_query_handler(func=lambda c: c.data == 'change_status_admin')
 def change_stat(callback_query):
     bot.answer_callback_query(callback_query.id)
-    message = bot.send_message(callback_query.from_user.id, "Введите номер находки", reply_markup=telebot.types.ReplyKeyboardRemove())
+    message = bot.send_message(callback_query.from_user.id, "Введите номер находки",
+                               reply_markup=telebot.types.ReplyKeyboardRemove())
 
     def choose_stat(message):
         sig = storage.get_sig(message.text)
         if sig is None:
-            bot.reply_to(message, "Такой заявки нет", reply_markup=telebot.types.ReplyKeyboardRemove())
+            bot.reply_to(message, "Такой заявки нет",
+                         reply_markup=telebot.types.ReplyKeyboardRemove())
             org_panel(message, True)
         else:
             keyboard = telebot.types.ReplyKeyboardMarkup()
@@ -260,15 +288,17 @@ def change_stat(callback_query):
             def fin_change_stat(message, num, sig):
                 storage.change_status(num, message.text)
                 logging.info("Change status by {} ({}): ".format(str(message.from_user.id), message.from_user.username)+"Номер: {}\nФИО: {}\nДата {}\nМестоположение:\nlongitude {},\nlatitude {}\nСтатус: {}".format(
-            sig['num'], sig['fio'], sig['time'], sig['longitude'], sig['latitude'], sig['status'])+" -> {}\n----------------".format(message.text))
-                bot.reply_to(message, 'Статус изменен', reply_markup=telebot.types.ReplyKeyboardRemove())
+                    sig['num'], sig['fio'], sig['time'], sig['longitude'], sig['latitude'], sig['status'])+" -> {}\n----------------".format(message.text))
+                bot.reply_to(message, 'Статус изменен',
+                             reply_markup=telebot.types.ReplyKeyboardRemove())
                 admin_panel(message, True)
 
-            bot.register_next_step_handler(message, fin_change_stat, message.text, sig)
-
+            bot.register_next_step_handler(
+                message, fin_change_stat, message.text, sig)
 
     bot.register_next_step_handler(message, choose_stat)
-        
+
+
 @bot.callback_query_handler(func=lambda c: c.data == 'get_storage')
 def get_storage(message):
     data = pandas.read_csv("storage.csv", index_col=False, encoding='utf-8')
@@ -276,15 +306,23 @@ def get_storage(message):
     f = open('storage.xlsx', "rb")
     bot.send_document(message.from_user.id, f)
     f.close()
-    logging.info("Got storage by {} ({})".format(str(message.from_user.id), message.from_user.username)+"\n----------------")
+    logging.info("Got storage by {} ({})".format(
+        str(message.from_user.id), message.from_user.username)+"\n----------------")
 
-while True:
-    try:
-        bot.polling(none_stop=True)
-    except KeyboardInterrupt:
-        break
-        exit(0)
-    except Exception as e:
-        print(e)
-        sleep(8)
 
+@server.route("/" + TOKEN, methods=['POST'])
+def getMessage():
+    bot.process_new_updates(
+        [telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+    return "!", 200
+
+
+@server.route("/", methods=['GET'])
+def webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url="https://{}.herokuapp.com/{}".format(APP_NAME, TOKEN))
+    return "!", 200
+
+
+if __name__ == "__main__":
+    server.run(host="0.0.0.0", port=os.environ.get('PORT', 5000))
