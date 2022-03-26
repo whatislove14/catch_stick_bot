@@ -1,0 +1,26 @@
+INFO:root:New sig by 430378049 (ragozina_ta): Номер: 6
+ФИО: Влад, люблю
+Дата 2022-03-26 04:31:53.700689
+Местоположение:
+longitude 37.622935,
+latitude 55.852685
+Статус: registered
+----------------
+INFO:root:Entered adminpanel by 430378049 (ragozina_ta)
+----------------
+INFO:root:Got storage by 430378049 (ragozina_ta)
+----------------
+INFO:root:Entered adminpanel by 732877680 (whatis_lav)
+----------------
+INFO:root:Got storage by 732877680 (whatis_lav)
+----------------
+INFO:root:Change status by 732877680 (whatis_lav): Номер: 6
+ФИО: Влад, люблю
+Дата 2022-03-26 04:31:53.700689
+Местоположение:
+longitude 37.622935,
+latitude 55.852685
+Статус: registered -> Ты лучшая <3
+----------------
+INFO:root:Got storage by 732877680 (whatis_lav)
+----------------
