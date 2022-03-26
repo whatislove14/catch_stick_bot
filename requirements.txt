@@ -1,4 +1,4 @@
-pyTelegramBotAPI==3.6.6
+pyTelegramBotAPI==3.7.9
 folium
 pandas
 Flask==2.0.2
