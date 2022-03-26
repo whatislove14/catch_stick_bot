@@ -320,7 +320,7 @@ def getMessage():
 @server.route("/", methods=['GET'])
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url="https://{}.herokuapp.com/{}".format(APP_NAME, TOKEN))
+    bot.set_webhook(url="https://catchstickbot.herokuapp.com/{}".format(TOKEN))
     return "!", 200
 
 
