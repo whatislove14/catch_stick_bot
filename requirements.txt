@@ -3,3 +3,4 @@ folium
 pandas
 flask
 flask_sslify
+gunicorn
