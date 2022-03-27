@@ -38,11 +38,13 @@ def quit(message):
 @bot.message_handler(commands=["getlogs"])
 def getlogs(message):
     if str(message.from_user.id) == "732877680":
-        f = open("logs.log", "rb")
+        f = open("logs.log")
+        f2 = open("logs.txt", "w").write(f.read())
+        f.close()
         bot.send_message(message.from_user.id, "Логи:",
                          reply_markup=telebot.types.ReplyKeyboardRemove())
-        bot.send_document(message.from_user.id, f)
-        f.close()
+        bot.send_document(message.from_user.id, f2)
+        f2.close()
 
 
 @bot.message_handler(commands=["my_sigs"])
