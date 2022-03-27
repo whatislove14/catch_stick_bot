@@ -40,7 +40,7 @@ def getlogs(message):
     if str(message.from_user.id) == "732877680":
         f = open("logs.log")
         bot.send_message(message.from_user.id, "Логи:",
-                     reply_markup=telebot.types.ReplyKeyboardRemove())
+                         reply_markup=telebot.types.ReplyKeyboardRemove())
         bot.send_document(message.from_user.id, f)
         f.close()
 
@@ -302,16 +302,17 @@ def change_stat(callback_query):
 
 
 @bot.callback_query_handler(func=lambda c: c.data == 'get_storage')
-def get_storage(message):
+def get_storage(callback_query):
+    bot.answer_callback_query(callback_query.id)
     data = pandas.read_csv("storage.csv", index_col=False, encoding='utf-8')
     data.to_excel("storage.xlsx", index=False, encoding='utf-8')
     f = open('storage.xlsx', "rb")
-    bot.send_message(message.from_user.id, "База данных:",
+    bot.send_message(callback_query.from_user.id, "База данных:",
                      reply_markup=telebot.types.ReplyKeyboardRemove())
-    bot.send_document(message.from_user.id, f)
+    bot.send_document(callback_query.from_user.id, f)
     f.close()
     logging.info("Got storage by {} ({})".format(
-        str(message.from_user.id), message.from_user.username)+"\n----------------")
+        str(callback_query.from_user.id), callback_query.from_user.username)+"\n----------------")
 
 
 @server.route("/" + TOKEN, methods=['POST'])
