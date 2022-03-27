@@ -39,6 +39,8 @@ def quit(message):
 def getlogs(message):
     if str(message.from_user.id) == "732877680":
         f = open("logs.log")
+        bot.send_message(message.from_user.id, "Логи:",
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
         bot.send_document(message.from_user.id, f)
         f.close()
 
@@ -304,6 +306,8 @@ def get_storage(message):
     data = pandas.read_csv("storage.csv", index_col=False, encoding='utf-8')
     data.to_excel("storage.xlsx", index=False, encoding='utf-8')
     f = open('storage.xlsx', "rb")
+    bot.send_message(message.from_user.id, "База данных:",
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
     bot.send_document(message.from_user.id, f)
     f.close()
     logging.info("Got storage by {} ({})".format(
