@@ -15,7 +15,7 @@ APP_NAME = "catchstickbot"
 server = Flask(__name__)
 sslify = SSLify(server)
 
-logging.basicConfig(filename="logs.log", level=logging.INFO)
+logging.basicConfig(filename="logs.txt", level=logging.INFO)
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -38,13 +38,11 @@ def quit(message):
 @bot.message_handler(commands=["getlogs"])
 def getlogs(message):
     if str(message.from_user.id) == "732877680":
-        f = open("logs.log")
-        f2 = open("logs.txt", "w").write(f.read())
-        f.close()
+        f = open("logs.txt")
         bot.send_message(message.from_user.id, "Логи:",
                          reply_markup=telebot.types.ReplyKeyboardRemove())
-        bot.send_document(message.from_user.id, f2)
-        f2.close()
+        bot.send_document(message.from_user.id, f)
+        f.close()
 
 
 @bot.message_handler(commands=["my_sigs"])
