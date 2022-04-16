@@ -4,3 +4,4 @@ pandas
 Flask==2.0.2
 Flask-SSLify==0.1.5
 gunicorn
+xlsxreader
