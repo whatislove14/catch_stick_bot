@@ -1,0 +1,45 @@
+ERROR:TeleBot:A request to the Telegram API was unsuccessful. Error code: 409. Description: Conflict: can't use getUpdates method while webhook is active; use deleteWebhook to delete the webhook first
+INFO:root:New sig by 732877680 (whatis_lav): Номер: 1
+ФИО: Большаков Владислав Максимович
+Дата 2022-04-17 00:37:22.617288
+Местоположение:
+longitude 82.97285,
+latitude 54.859884
+Статус: registered
+----------------
+INFO:root:Entered adminpanel by 732877680 (whatis_lav)
+----------------
+INFO:root:Got storage by 732877680 (whatis_lav)
+----------------
+INFO:root:New sig by 430378049 (ragozina_ta): Номер: 2
+ФИО: Таааасечка
+Дата 2022-04-17 00:38:46.592108
+Местоположение:
+longitude 83.087585,
+latitude 54.868782
+Статус: registered
+----------------
+INFO:root:New sig by 430378049 (ragozina_ta): Номер: 3
+ФИО: Тасюсюлечка
+Дата 2022-04-17 00:39:22.513774
+Местоположение:
+longitude 83.087413,
+latitude 54.86877
+Статус: registered
+----------------
+INFO:root:Got storage by 732877680 (whatis_lav)
+----------------
+INFO:root:Entered adminpanel by 430378049 (ragozina_ta)
+----------------
+INFO:root:Change status by 430378049 (ragozina_ta): Номер: 1
+ФИО: Большаков Владислав Максимович
+Дата 2022-04-17 00:37:22.617000
+Местоположение:
+longitude 82.97285,
+latitude 54.859884
+Статус: registered -> accepted
+----------------
+INFO:root:Got storage by 430378049 (ragozina_ta)
+----------------
+INFO:root:Got storage by 732877680 (whatis_lav)
+----------------
