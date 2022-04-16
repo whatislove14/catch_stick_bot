@@ -306,7 +306,7 @@ def get_storage(callback_query):
     bot.answer_callback_query(callback_query.id)
     # data = pandas.read_csv("storage.csv", index_col=False, encoding='utf-8')
     # data.to_excel("storage.xlsx", index=False, encoding='utf-8')
-    f = open('storage.csv', "rb")
+    f = open('storage.xlsx', "rb")
     bot.send_message(callback_query.from_user.id, "База данных:",
                      reply_markup=telebot.types.ReplyKeyboardRemove())
     bot.send_document(callback_query.from_user.id, f)
