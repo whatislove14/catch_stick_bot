@@ -325,9 +325,9 @@ def getMessage():
 @server.route("/", methods=['GET'])
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url="https://217.25.89.150/{}".format(TOKEN))
+    bot.set_webhook(url="https://882659-cg05265.tmweb.ru/{}".format(TOKEN))
     return "!", 200
 
 
 if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=os.environ.get('PORT', 23))
+    server.run(host="0.0.0.0", port=os.environ.get('PORT', 443))
