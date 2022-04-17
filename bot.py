@@ -14,7 +14,7 @@ TOKEN = "5219218963:AAFRuxk0G7RrYGAq6su7M5beww1RHl6KokY"
 APP_NAME = "catchstickbot"
 
 server = Flask(__name__)
-# sslify = SSLify(server)
+sslify = SSLify(server)
 
 logging.basicConfig(filename="logs.txt", level=logging.INFO)
 
@@ -23,7 +23,7 @@ bot = telebot.TeleBot(TOKEN)
 already_clicked = False
 
 bot.remove_webhook()
-bot.set_webhook(url="http://882659-cg05265.tmweb.ru/{}".format(TOKEN))
+bot.set_webhook(url="https://882659-cg05265.tmweb.ru/{}".format(TOKEN))
 
 def update_map():
     mapp = folium.Map(location=[54.859989, 82.972914], zoom_start=1)
