@@ -19,6 +19,8 @@ logging.basicConfig(filename="logs.txt", level=logging.INFO)
 
 bot = telebot.TeleBot(TOKEN)
 
+bot.set_webhook(url="217.25.89.150/{}".format(TOKEN))
+
 already_clicked = False
 
 
@@ -321,13 +323,13 @@ def getMessage():
         [telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
     return "!", 200
 
-
+'''
 @server.route("/", methods=['GET'])
 def webhook():
     bot.remove_webhook()
     bot.set_webhook(url="217.25.89.150/{}".format(TOKEN))
     return "!", 200
-
+'''
 
 if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=os.environ.get('PORT', 5000))
+    server.run(host="0.0.0.0", port=os.environ.get('PORT', 22))
