@@ -13,6 +13,8 @@ from flask_sslify import SSLify
 TOKEN = "5219218963:AAFRuxk0G7RrYGAq6su7M5beww1RHl6KokY"
 APP_NAME = "catchstickbot"
 
+print("TEST")
+
 server = Flask(__name__)
 # sslify = SSLify(server)
 
