@@ -23,7 +23,7 @@ bot = telebot.TeleBot(TOKEN)
 already_clicked = False
 
 bot.remove_webhook()
-bot.set_webhook(url="882659-cg05265.tmweb.ru/{}".format(TOKEN))
+bot.set_webhook(url="https://217.25.89.150/{}".format(TOKEN))
 
 def update_map():
     mapp = folium.Map(location=[54.859989, 82.972914], zoom_start=1)
@@ -327,11 +327,10 @@ def getMessage():
 
 @server.route("/", methods=['GET'])
 def webhook():
-    print("TESTESTESTEST")
     bot.remove_webhook()
-    bot.set_webhook(url="http://882659-cg05265.tmweb.ru/{}".format(TOKEN))
+    bot.set_webhook(url="https://217.25.89.150/{}".format(TOKEN))
     return "!", 200
 
 
 if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=os.environ.get('PORT', 443))
+    server.run(host="localhost", port=os.environ.get('PORT', 443))
