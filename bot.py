@@ -14,7 +14,7 @@ TOKEN = "5219218963:AAFRuxk0G7RrYGAq6su7M5beww1RHl6KokY"
 APP_NAME = "catchstickbot"
 
 server = Flask(__name__)
-sslify = SSLify(server)
+# sslify = SSLify(server)
 
 logging.basicConfig(filename="logs.txt", level=logging.INFO)
 
