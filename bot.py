@@ -9,6 +9,7 @@ import pandas
 from flask import Flask, request
 from flask_sslify import SSLify
 
+
 TOKEN = "5219218963:AAFRuxk0G7RrYGAq6su7M5beww1RHl6KokY"
 APP_NAME = "catchstickbot"
 
@@ -325,7 +326,7 @@ def getMessage():
 @server.route("/", methods=['GET'])
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url="https://882659-cg05265.tmweb.ru/{}".format(TOKEN))
+    bot.set_webhook(url="882659-cg05265.tmweb.ru/{}".format(TOKEN))
     return "!", 200
 
 
