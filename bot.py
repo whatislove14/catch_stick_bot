@@ -13,17 +13,23 @@ from flask_sslify import SSLify
 TOKEN = "5219218963:AAFRuxk0G7RrYGAq6su7M5beww1RHl6KokY"
 APP_NAME = "catchstickbot"
 
-server = Flask(__name__)
-sslify = SSLify(server)
+app = Flask(__name__)
+sslify = SSLify(app)
 
 logging.basicConfig(filename="logs.txt", level=logging.INFO)
 
 bot = telebot.TeleBot(TOKEN)
 
-already_clicked = False
-
 bot.remove_webhook()
-bot.set_webhook(url="882659-cg05265.tmweb.ru/{}".format(TOKEN))
+bot.set_webhook(url=f"882659-cg05265.tmweb.ru/{TOKEN}")
+
+@app.route("/"+TOKEN, methods=['POST'])
+def getMessage():
+    bot.process_new_updates(
+        [telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+    return "!", 200
+
+already_clicked = False
 
 def update_map():
     mapp = folium.Map(location=[54.859989, 82.972914], zoom_start=1)
@@ -317,20 +323,13 @@ def get_storage(callback_query):
     logging.info("Got storage by {} ({})".format(
         str(callback_query.from_user.id), callback_query.from_user.username)+"\n----------------")
 
-
-@server.route("/" + TOKEN, methods=['POST'])
-def getMessage():
-    bot.process_new_updates(
-        [telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-    return "!", 200
-
-
-@server.route("/", methods=['GET'])
+@app.route("/", methods=['GET'])
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url="882659-cg05265.tmweb.ru/{}".format(TOKEN))
+    bot.set_webhook(url=f"882659-cg05265.tmweb.ru/{TOKEN}")
     return "!", 200
 
 
 if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=os.environ.get('PORT', 443))
+    app.run(host=os.getenv('IP', '0.0.0.0'),
+            port=int(os.getenv('PORT', 4444)))
