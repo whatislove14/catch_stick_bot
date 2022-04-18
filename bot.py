@@ -23,7 +23,7 @@ bot = telebot.TeleBot(TOKEN)
 already_clicked = False
 
 bot.remove_webhook()
-bot.set_webhook(url="https://882659-cg05265.tmweb.ru/{}".format(TOKEN), certificate=open("cert.pem", "rb"))
+bot.set_webhook(url="882659-cg05265.tmweb.ru/{}".format(TOKEN), certificate="rootCA.pem")
 
 def update_map():
     mapp = folium.Map(location=[54.859989, 82.972914], zoom_start=1)
