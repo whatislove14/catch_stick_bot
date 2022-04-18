@@ -6,6 +6,7 @@ import datetime
 import logging
 import os
 import pandas
+import requests
 from flask import Flask, request
 from flask_sslify import SSLify
 
@@ -22,6 +23,12 @@ bot = telebot.TeleBot(TOKEN)
 
 bot.remove_webhook()
 bot.set_webhook(url=f"882659-cg05265.tmweb.ru/{TOKEN}")
+
+def send_message(chat_id, text):
+    method = "sendMessage"
+    url = f"https://api.telegram.org/bot{TOKEN}/{method}"
+    data = {"chat_id": chat_id, "text": text}
+    requests.post(url, data=data)
 
 @app.route("/"+TOKEN, methods=['POST'])
 def getMessage():
