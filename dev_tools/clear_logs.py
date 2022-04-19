@@ -1,2 +1,2 @@
-with open("..\\logs.log", "w") as f:
+with open("logs.log", "w") as f:
     f.write("")
