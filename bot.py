@@ -35,8 +35,7 @@ WEBHOOK_SSL_PRIV = './webhook_pkey.pem'  # Path to the ssl private key
 WEBHOOK_URL_BASE = "https://%s:%s" % (WEBHOOK_HOST, WEBHOOK_PORT)
 WEBHOOK_URL_PATH = "/%s/" % (API_TOKEN)
 
-app = Flask(__name__)
-sslify = SSLify(app)
+open("logs.txt", "w").write("")
 
 logging.basicConfig(filename="logs.txt", level=logging.INFO)
 
@@ -55,7 +54,7 @@ class WebhookServer(object):
             return ''
         else:
             raise cherrypy.HTTPError(403)
-            
+
 
 already_clicked = False
 
