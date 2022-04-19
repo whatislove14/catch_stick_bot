@@ -1,6 +1,5 @@
-import csv
+import pandas as pd
 
-with open('storage.csv', 'w', encoding='utf-8') as csvfile:
-    fieldnames = ['tgid', 'num', 'fio', 'time', 'longitude', 'latitude', 'status']
-    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    writer.writeheader()
+fieldnames = ['tgid', 'num', 'fio', 'time', 'longitude', 'latitude', 'status']
+data = pd.DataFrame(columns=fieldnames)
+data.to_xlsx("storage.xlsx")

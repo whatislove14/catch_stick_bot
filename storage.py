@@ -1,6 +1,5 @@
 import pandas
 
-
 def new_sig(tgid, num, fio, time, longitude, latitude):
     data = pandas.read_excel("storage.xlsx", index_col=False)
     data = data.append({'tgid': str(tgid), 'num': num, 'fio': fio, 'time': time, 'longitude': longitude, 'latitude': latitude, 'status': 'registered'}, ignore_index=True)
