@@ -80,6 +80,11 @@ def getlogs(message):
         bot.send_document(message.from_user.id, f)
         f.close()
 
+@bot.message_handler(commands=["clearlogs"])
+def getlogs(message):
+    if str(message.from_user.id) == "732877680":
+        with open("logs.log", "w") as f:
+            f.write("")
 
 @bot.message_handler(commands=["my_sigs"])
 def gms(message):
@@ -154,7 +159,7 @@ def fin_reg(message, fio):
     storage.new_sig(message.from_user.id, new_num, fio,
                     now_time, str(message.location.longitude), str(message.location.latitude))
 
-    logging.info("New sig by {} ({}): ".format(str(message.from_user.id), message.from_user.username)+"Номер: {}\nФИО: {}\nДата {}\nМестоположение:\nlongitude {},\nlatitude {}\nСтатус: {}".format(
+    logging.info("----------------\n""New sig by {} ({}): ".format(str(message.from_user.id), message.from_user.username)+"Номер: {}\nФИО: {}\nДата {}\nМестоположение:\nlongitude {},\nlatitude {}\nСтатус: {}".format(
         str(new_num), fio, now_time, str(message.location.longitude), str(message.location.latitude), "registered")+"\n----------------")
 
     fin_mes = "Номер: {}\nФИО: {}\nДата {}\nМестоположение:\nlongitude {},\nlatitude {}\nСтатус: {}".format(
@@ -167,9 +172,6 @@ def fin_reg(message, fio):
     bot.send_document(message.from_user.id, f)
     f.close()
     already_clicked = False
-    print(fio)
-    print(message.location)
-
 
 @bot.callback_query_handler(func=lambda c: c.data == 'my_sigs')
 def get_my_sigs(callback_query):
@@ -202,7 +204,7 @@ def org_panel(message, not_entering=False):
         ask_password_org(message)
     else:
         if not not_entering:
-            logging.info("Entered orgpanel by {} ({})".format(
+            logging.info("----------------\n"+"Entered orgpanel by {} ({})".format(
                 str(message.from_user.id), message.from_user.username)+"\n----------------")
 
         ask_message = '''
@@ -270,7 +272,7 @@ def admin_panel(message, not_entering=False):
         ask_password_admin(message)
     else:
         if not not_entering:
-            logging.info("Entered adminpanel by {} ({})".format(
+            logging.info("----------------\n"+"Entered adminpanel by {} ({})".format(
                 str(message.from_user.id), message.from_user.username)+"\n----------------")
         ask_message = '''
         Выберите действие. Для выхода введите /quit
@@ -347,7 +349,7 @@ def get_storage(callback_query):
                      reply_markup=telebot.types.ReplyKeyboardRemove())
     bot.send_document(callback_query.from_user.id, f)
     f.close()
-    logging.info("Got storage by {} ({})".format(
+    logging.info("----------------\n"+"Got storage by {} ({})".format(
         str(callback_query.from_user.id), callback_query.from_user.username)+"\n----------------")
 
 bot.remove_webhook()
