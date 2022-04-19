@@ -160,7 +160,7 @@ def fin_reg(message, fio):
     storage.new_sig(message.from_user.id, new_num, fio,
                     now_time, str(message.location.longitude), str(message.location.latitude))
 
-    logging.info("----------------\n""New sig by {} ({}): ".format(str(message.from_user.id), message.from_user.username)+"Номер: {}\nФИО: {}\nДата {}\nМестоположение:\nlongitude {},\nlatitude {}\nСтатус: {}".format(
+    logging.info("\n----------------\n""New sig by {} ({}): ".format(str(message.from_user.id), message.from_user.username)+"Номер: {}\nФИО: {}\nДата {}\nМестоположение:\nlongitude {},\nlatitude {}\nСтатус: {}".format(
         str(new_num), fio, now_time, str(message.location.longitude), str(message.location.latitude), "registered")+"\n----------------")
 
     fin_mes = "Номер: {}\nФИО: {}\nДата {}\nМестоположение:\nlongitude {},\nlatitude {}\nСтатус: {}".format(
@@ -205,7 +205,7 @@ def org_panel(message, not_entering=False):
         ask_password_org(message)
     else:
         if not not_entering:
-            logging.info("----------------\n"+"Entered orgpanel by {} ({})".format(
+            logging.info("\n----------------\n"+"Entered orgpanel by {} ({})".format(
                 str(message.from_user.id), message.from_user.username)+"\n----------------")
 
         ask_message = '''
@@ -246,7 +246,7 @@ def change_stat(callback_query):
 
             def fin_change_stat(message, num, sig):
                 storage.change_status(num, message.text)
-                logging.info("Change status by {} ({}): ".format(str(message.from_user.id), message.from_user.username)+"Номер: {}\nФИО: {}\nДата {}\nМестоположение:\nlongitude {},\nlatitude {}\nСтатус: {}".format(
+                logging.info("\n----------------\n"+"Change status by {} ({}): ".format(str(message.from_user.id), message.from_user.username)+"Номер: {}\nФИО: {}\nДата {}\nМестоположение:\nlongitude {},\nlatitude {}\nСтатус: {}".format(
                     sig['num'], sig['fio'], sig['time'], sig['longitude'], sig['latitude'], sig['status'])+" -> {}\n----------------".format(message.text))
                 bot.reply_to(message, 'Статус изменен',
                              reply_markup=telebot.types.ReplyKeyboardRemove())
@@ -273,7 +273,7 @@ def admin_panel(message, not_entering=False):
         ask_password_admin(message)
     else:
         if not not_entering:
-            logging.info("----------------\n"+"Entered adminpanel by {} ({})".format(
+            logging.info("\n----------------\n"+"Entered adminpanel by {} ({})".format(
                 str(message.from_user.id), message.from_user.username)+"\n----------------")
         ask_message = '''
         Выберите действие. Для выхода введите /quit
@@ -328,7 +328,7 @@ def change_stat(callback_query):
 
             def fin_change_stat(message, num, sig):
                 storage.change_status(num, message.text)
-                logging.info("Change status by {} ({}): ".format(str(message.from_user.id), message.from_user.username)+"Номер: {}\nФИО: {}\nДата {}\nМестоположение:\nlongitude {},\nlatitude {}\nСтатус: {}".format(
+                logging.info("\n----------------\n"+"Change status by {} ({}): ".format(str(message.from_user.id), message.from_user.username)+"Номер: {}\nФИО: {}\nДата {}\nМестоположение:\nlongitude {},\nlatitude {}\nСтатус: {}".format(
                     sig['num'], sig['fio'], sig['time'], sig['longitude'], sig['latitude'], sig['status'])+" -> {}\n----------------".format(message.text))
                 bot.reply_to(message, 'Статус изменен',
                              reply_markup=telebot.types.ReplyKeyboardRemove())
@@ -350,7 +350,7 @@ def get_storage(callback_query):
                      reply_markup=telebot.types.ReplyKeyboardRemove())
     bot.send_document(callback_query.from_user.id, f)
     f.close()
-    logging.info("----------------\n"+"Got storage by {} ({})".format(
+    logging.info("\n----------------\n"+"Got storage by {} ({})".format(
         str(callback_query.from_user.id), callback_query.from_user.username)+"\n----------------")
 
 bot.remove_webhook()
