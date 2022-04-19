@@ -85,6 +85,7 @@ def getlogs(message):
     if str(message.from_user.id) == "732877680":
         with open("logs.log", "w") as f:
             f.write("")
+        bot.reply_to(message, "Cleared logs")
 
 @bot.message_handler(commands=["my_sigs"])
 def gms(message):
