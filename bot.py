@@ -56,7 +56,7 @@ class WebhookServer(object):
             raise cherrypy.HTTPError(403)
 
 
-already_clicked = False
+# already_clicked = False
 
 def update_map():
     mapp = folium.Map(location=[54.859989, 82.972914], zoom_start=1)
@@ -127,11 +127,8 @@ def start(message):
 
 @bot.callback_query_handler(func=lambda c: c.data == 'reg_find')
 def find_reg(callback_query):
-    global already_clicked
-    if already_clicked:
-        bot.answer_callback_query(callback_query.id)
-        return
-    already_clicked = True
+    # global already_clicked
+    # already_clicked = True
     bot.answer_callback_query(callback_query.id)
     message = bot.send_message(callback_query.from_user.id, 'Введите свое ФИО',
                                reply_markup=telebot.types.ReplyKeyboardRemove())
@@ -154,7 +151,7 @@ P.S не забудь включить доступ к местоположен�
 
 
 def fin_reg(message, fio):
-    global already_clicked
+    # global already_clicked
     new_num = len(storage.get_all_sigs())+1
     now_time = datetime.datetime.now()
     storage.new_sig(message.from_user.id, new_num, fio,
@@ -172,7 +169,7 @@ def fin_reg(message, fio):
     bot.send_message(message.from_user.id, "Карта заявок:")
     bot.send_document(message.from_user.id, f)
     f.close()
-    already_clicked = False
+    # already_clicked = False
 
 @bot.callback_query_handler(func=lambda c: c.data == 'my_sigs')
 def get_my_sigs(callback_query):
